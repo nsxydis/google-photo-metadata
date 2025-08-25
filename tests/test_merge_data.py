@@ -3,6 +3,7 @@ Purpose: Test merging metadata into a photo.
 '''
 # Standard modules
 import os
+import datetime
 import json
 import exif
 
@@ -63,13 +64,16 @@ def test_add_data():
                 # Read the metadata
                 metadata = json.load(f)
 
-            # Add the metadata to the image file
-            image = recursive_set(image, metadata)
+            # Convert the date taken from timestamp
+            timestamp = int(metadata['photoTakenTime']['timestamp'])
+            dt = datetime.datetime.fromtimestamp(timestamp, tz = datetime.timezone.utc)
+            dt_original = dt.strftime("%Y:%m:%d %H:%M:%S")
+            print(dt_original)
 
             # Write the Date Taken
             image.set(
-                "Date Taken",
-                metadata['photoTakenTime']['timestamp']
+                "datetime_original",
+                dt_original    
             )
 
             # Output the image file
