@@ -66,11 +66,17 @@ def test_add_data():
             # Add the metadata to the image file
             image = recursive_set(image, metadata)
 
+            # Write the Date Taken
+            image.set(
+                "Date Taken",
+                metadata['photoTakenTime']['timestamp']
+            )
+
             # Output the image file
-            print(out_path) # TEMP
             with open(out_path, 'wb') as f:
                 f.write(image.get_file())
 
+# XXX: Obsolete
 def recursive_set(image: exif.Image, metadata: dict) -> exif.Image:
     '''Recursively set the metadata'''
     for key, value in metadata.items():
